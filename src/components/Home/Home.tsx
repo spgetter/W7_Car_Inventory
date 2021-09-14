@@ -64,6 +64,10 @@ const useStyles = makeStyles({
         left: '50%',
         transform: 'translate(-50%, -50%)',
         color: 'white'
+    },
+    photo_credit:{
+        fontSize: '6px',
+        textAlign: 'right'
     }
     
 })
@@ -104,13 +108,17 @@ export const Home = ( props:Props ) => {
             </nav>
 
             {/* Main Home Area */}
-            <main className={classes.main}>
+            <main className={classes.main}>               
+                <p className={classes.photo_credit}>
+                    <a href={"https://unsplash.com/@rstone_design?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"}>Ryan Stone</a> 
+                    on 
+                    <a href={"https://unsplash.com/s/photos/mountain-road?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"}>Unsplash</a>
+                </p>
                 <div className={classes.main_text}>
                     <h1> { props.title } </h1>
                     <p>Get on the road!</p>
                     <Button color='primary' variant='contained'>Click Here</Button>
-                </div>
-
+                </div> 
             </main>
             Hello World 😉!
         </div>
