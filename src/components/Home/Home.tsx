@@ -93,7 +93,7 @@ export const Home = ( props:Props ) => {
                             <Link to='/' className={classes.nav_a}>Home</Link>
                         </li>
                         <li>
-                            <Link to='/profile'  className={classes.nav_a}>Profile</Link>
+                            <Link to='/collection'  className={classes.nav_a}>Collection</Link>
                         </li>
                         <li>
                             <Link to='/signin'  className={classes.nav_a}>Sign In</Link>

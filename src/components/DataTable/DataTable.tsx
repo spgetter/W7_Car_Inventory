@@ -1,11 +1,20 @@
-import * as React from 'react';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@material-ui/data-grid';
+import React, {useState} from 'react';
+import { DataGrid, GridColDef, GridSelectionModel} from '@material-ui/data-grid';
+import { server_calls } from '../../api'; // ADD THIS
+import { useGetData } from '../../custom-hooks'; // ADD THIS
+import { Button,Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle } from '@material-ui/core'; // ADD THESE
+import { CarForm } from '../../components/CarForm';
 
 const columns: GridColDef[] = [
     { 
         field: 'id',
-         headerName: 'ID', 
-         width: 50, 
+          headerName: 'ID', 
+          width: 150,
+          editable: true, 
     },
     { 
         field: 'make',
@@ -70,67 +79,48 @@ const columns: GridColDef[] = [
     },
   ];
 
-
-const rows = [
-   {
-        id: 1,
-        make: "Chevrolet",
-        model: "El Camino",
-        year: "1980",
-        price: 2500.00,
-        seats: "cloth",
-        transmission: "manual",
-        engine: "Buick 3.1l",
-        dimensions: "72w 55h 202l",
-        weight: "3428.2 lb",
-        MSRP: 5911.00
-    },
-    {
-        id: 2,
-        make : "Ford",
-        model : "Maverick",
-        year : "1973",
-        price : 300.00,
-        seats : "cloth",
-        transmission : "automatic",
-        engine : "200 CID I6",
-        dimensions : "70w 53w 179l",
-        weight : "2909 lb",
-        MSRP : 2248.00
-    },
-    {
-        id: 3,
-        make : "Ford",
-        model : "Pinto Wagon",
-        year : "1974",
-        price : 50.00,
-        seats : "cloth",
-        transmission : "automatic",
-        engine : "122 CID V4",
-        dimensions : "70w 52h 179l",
-        weight : "2576 lb",
-        MSRP : 2770.00
-    },
-    {
-        id: 4,
-        make : "Mercedes Benz",
-        model : "GL350 Bluetec",
-        year : "2010",
-        price : 21080.42,
-        seats : "leather",
-        transmission : "automatic",
-        engine : "3.0l V6 Diesel",
-        dimensions : "76w 72h 200l",
-        weight : "5423 lb",
-        MSRP : 59950.00
+  export const DataTable =  () => {
+  
+    let { carData, getData } = useGetData();
+    let [open, setOpen] = useState(false);
+    let [gridData, setData] = useState<GridSelectionModel>([])
+  
+    let handleOpen = () => {
+      setOpen(true)
     }
-]
-
-export const DataTable = () => {
-    return (
-        <div style={{ height: 400, width: '100%' }}>
-            <h2>Thrones In Inventory</h2>
-            <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
-        </div>
-    );
-}
+  
+    let handleClose = () => {
+      setOpen(false)
+    }
+  
+    let deleteData = () => {
+      server_calls.delete(`${gridData[0]}`)
+      getData()
+    }
+  
+      return (
+          <div style={{ height: 400, width: '100%' }}>
+            <h2>Cars In Inventory</h2>
+            <DataGrid rows={carData} columns={columns} pageSize={5} checkboxSelection onSelectionModelChange={(newSelectionModel) => {
+              setData(newSelectionModel)
+            }} 
+            selectionModel={gridData}
+            {...carData}/>
+  
+            <Button color='primary' variant='contained' onClick={handleOpen}>Update</Button>
+            <Button variant="contained" color="secondary" onClick={deleteData}>Delete</Button>
+  
+              {/*Dialog Pop Up begin */}
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Update Your Car</DialogTitle>
+              <DialogContent>
+                <DialogContentText>Car:{gridData[0]}</DialogContentText>
+                  <CarForm id={`${gridData[0]}`}/>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick = {handleClose} color="primary">Cancel</Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        );
+  }

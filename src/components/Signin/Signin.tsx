@@ -115,8 +115,8 @@ export const Signin = withRouter(( props:SigninProps ) => {
         onClick: () => history.push('/')
       },
       {
-        text: 'Profile',
-        onClick: () => history.push('/profile')
+        text: 'Collection',
+        onClick: () => history.push('/collection')
       },
       {
         text: 'Sign Up',
